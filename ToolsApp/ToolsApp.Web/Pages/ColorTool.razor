@@ -1,11 +1,9 @@
 ﻿@page "/color-tool"
 
-@using ToolsApp.Core.Interfaces.Models
-@using ToolsApp.Models
 
-<header>
-  <h3>Color Tool</h3>
-</header>
+
+<ToolHeader HeaderText="Color Tool"></ToolHeader>
+<ToolHeader HeaderText="@headerText"></ToolHeader>
 
 <ul>
   @foreach(var color in Colors)
@@ -27,6 +25,8 @@
 </form>
 
 @code {
+
+  private string headerText = "Color Tool 2";
 
   private ColorFormModel colorForm = new();
 
