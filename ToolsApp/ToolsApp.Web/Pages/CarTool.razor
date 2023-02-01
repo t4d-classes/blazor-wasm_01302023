@@ -31,7 +31,10 @@
   private void deleteCar(int carId)
   {
     var car = cars.Find(c => c.Id == carId);
-    cars.Remove(car);
+    if (car is not null)
+    {
+      cars.Remove(car);
+    }
   }
 
 

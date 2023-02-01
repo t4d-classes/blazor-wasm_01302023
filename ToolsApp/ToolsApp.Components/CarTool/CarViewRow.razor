@@ -1,19 +1,26 @@
-﻿<tr>
-  <td>@Car.Id</td>
-  <td>@Car.Make</td>
-  <td>@Car.Model</td>
-  <td>@Car.Year</td>
-  <td>@Car.Color</td>
-  <td>@Car.Price</td>
-  <td>
-    <button type="button" @onclick="@deleteCar">Delete</button>
-  </td>
-</tr>
+﻿@if (Car is null)
+{
+  <tr><td colspan="7">No Car Provided</td></tr>  
+}
+else
+{
+  <tr>
+    <td>@Car.Id</td>
+    <td>@Car.Make</td>
+    <td>@Car.Model</td>
+    <td>@Car.Year</td>
+    <td>@Car.Color</td>
+    <td>@Car.Price</td>
+    <td>
+      <button type="button" @onclick="@deleteCar">Delete</button>
+    </td>
+  </tr>
+}
 
 @code {
 
   [Parameter]
-  public ICar Car { get; set; }
+  public ICar? Car { get; set; }
 
   [Parameter]
   public EventCallback<int> OnDeleteCar { get; set; }
@@ -21,7 +28,10 @@
 
   private async Task deleteCar()
   {
-    await OnDeleteCar.InvokeAsync(Car.Id);
+    if (Car is not null)
+    {
+      await OnDeleteCar.InvokeAsync(Car.Id);
+    }
   }
 
 }
