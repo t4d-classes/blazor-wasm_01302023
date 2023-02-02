@@ -1,0 +1,52 @@
+﻿@if (Car is null)
+{
+  <tr><td colspan="7">No Car Provided</td></tr>  
+}
+else
+{
+  <tr>
+    <td>@Car.Id</td>
+    <td><input type="text" @bind="@carForm.Make" /></td>
+    <td><input type="text" @bind="@carForm.Model" /></td>
+    <td><input type="number" @bind="@carForm.Year" /></td>
+    <td><input type="text" @bind="@carForm.Color" /></td>
+    <td><input type="number" @bind="@carForm.Price" /></td>
+    <td>
+      <button type="button">Save</button>
+      <button type="button">Cancel</button>
+    </td>
+  </tr>
+}
+
+@code {
+
+  private CarFormModel carForm = new();
+
+  [Parameter]
+  public ICar? Car { get; set; }
+
+  protected override void OnInitialized()
+  {
+    if (Car is not null)
+    {
+      carForm = new()
+        {
+          Make = Car.Make,
+          Model = Car.Model,
+          Year = Car.Year,
+          Color = Car.Color,
+          Price = Car.Price
+        };
+    }
+  }
+
+  class CarFormModel
+  {
+    public string Make { get; set; }
+    public string Model { get; set; }
+    public int Year { get; set; }
+    public string Color { get; set; }
+    public decimal Price { get; set; }
+  }
+
+}

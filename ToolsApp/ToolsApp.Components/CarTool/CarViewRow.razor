@@ -12,6 +12,7 @@ else
     <td>@Car.Color</td>
     <td>@Car.Price</td>
     <td>
+      <button type="button" @onclick="@editCar">Edit</button>
       <button type="button" @onclick="@deleteCar">Delete</button>
     </td>
   </tr>
@@ -23,8 +24,10 @@ else
   public ICar? Car { get; set; }
 
   [Parameter]
-  public EventCallback<int> OnDeleteCar { get; set; }
+  public EventCallback<int> OnEditCar { get; set; }
 
+  [Parameter]
+  public EventCallback<int> OnDeleteCar { get; set; }
 
   private async Task deleteCar()
   {
@@ -33,5 +36,14 @@ else
       await OnDeleteCar.InvokeAsync(Car.Id);
     }
   }
+
+  private async Task editCar()
+  {
+    if (Car is not null)
+    {
+      await OnEditCar.InvokeAsync(Car.Id);
+    }
+  }
+
 
 }
