@@ -12,8 +12,8 @@ else
     <td><input type="text" @bind="@carForm.Color" /></td>
     <td><input type="number" @bind="@carForm.Price" /></td>
     <td>
-      <button type="button">Save</button>
-      <button type="button">Cancel</button>
+      <button type="button" @onclick="saveCar">Save</button>
+      <button type="button" @onclick="cancelCar">Cancel</button>
     </td>
   </tr>
 }
@@ -24,6 +24,13 @@ else
 
   [Parameter]
   public ICar? Car { get; set; }
+
+  [Parameter]
+  public EventCallback<Car> OnSaveCar { get; set; }
+
+  [Parameter]
+  public EventCallback OnCancelCar { get; set; }
+
 
   protected override void OnInitialized()
   {
@@ -38,6 +45,31 @@ else
           Price = Car.Price
         };
     }
+  }
+
+
+  private async Task saveCar()
+  {
+    if (Car is not null)
+    {
+      var car = new Car()
+        {
+          Id = Car.Id,
+          Make = carForm.Make,
+          Model = carForm.Model,
+          Year = carForm.Year,
+          Color = carForm.Color,
+          Price = carForm.Price,
+        };
+
+
+      await OnSaveCar.InvokeAsync(car);
+    }
+  }
+
+  private async Task cancelCar()
+  {
+    await OnCancelCar.InvokeAsync();
   }
 
   class CarFormModel

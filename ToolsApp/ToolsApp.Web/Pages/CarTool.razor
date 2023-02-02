@@ -5,7 +5,8 @@
 <ToolHeader HeaderText="Car Tool" />
 
 <CarTable Cars="@cars" EditCarId="@editCarId"
-    OnEditCar="@editCar" OnDeleteCar="@deleteCar" />
+    OnEditCar="@editCar" OnDeleteCar="@deleteCar"
+    OnSaveCar="@saveCar" OnCancelCar="@cancelCar" />
 
 <CarForm ButtonText="Add Car" OnSubmitCar="@addCar"></CarForm>
 
@@ -23,6 +24,11 @@
     editCarId = carId;
   }
 
+  private void cancelCar()
+  {
+    editCarId = -1;
+  }
+
   private void addCar(INewCar newCar)
   {
     cars.Add(new Car()
@@ -34,6 +40,7 @@
         Color = newCar.Color,
         Price = newCar.Price,
       });
+    editCarId = -1;
   }
 
   private void deleteCar(int carId)
@@ -43,6 +50,14 @@
     {
       cars.Remove(car);
     }
+    editCarId = -1;
+  }
+
+  private void saveCar(Car car)
+  {
+    var carIndex = cars.FindIndex(c => c.Id == car.Id);
+    cars[carIndex] = car;
+    editCarId = -1;
   }
 
 

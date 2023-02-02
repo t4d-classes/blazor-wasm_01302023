@@ -21,12 +21,12 @@
     {
       @if (car.Id == EditCarId)
       {
-        <CarEditRow Car="@car"></CarEditRow>
+        <CarEditRow Car="@car" OnSaveCar="@OnSaveCar" OnCancelCar="@OnCancelCar"></CarEditRow>
 
       }
       else
       {
-        <CarViewRow Car="@car" OnEditCar="@editCar" OnDeleteCar="@deleteCar"></CarViewRow>
+        <CarViewRow Car="@car" OnEditCar="@OnEditCar" OnDeleteCar="@OnDeleteCar"></CarViewRow>
       }
     }
   </tbody>
@@ -45,13 +45,10 @@
   [Parameter]
   public EventCallback<int> OnDeleteCar { get; set; }
 
-  private async Task editCar(int carId)
-  {
-    await OnEditCar.InvokeAsync(carId);
-  }
+  [Parameter]
+  public EventCallback<Car> OnSaveCar { get; set; }
 
-  private async Task deleteCar(int carId)
-  {
-    await OnDeleteCar.InvokeAsync(carId);
-  }
+  [Parameter]
+  public EventCallback OnCancelCar { get; set; }
+
 }
