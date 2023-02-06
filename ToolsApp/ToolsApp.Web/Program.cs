@@ -12,6 +12,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<IColorsData, ColorsInMemoryData>();
+builder.Services.AddSingleton<ICarsData, CarsInMemoryData>();
 
 var app = builder.Build();
 

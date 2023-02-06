@@ -20,13 +20,22 @@
 
   private ColorFormModel colorForm = new();
 
+  private IMapper _mapper;
+
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+
+      var mapperConfig = new MapperConfiguration(config => {
+        config.CreateMap<ColorFormModel, NewColor>();
+      });
+
+      _mapper = mapperConfig.CreateMapper();
+  }
+
   private async Task submitColor()
   {
-    await OnSubmitColor.InvokeAsync(new NewColor
-      {
-        Name = colorForm.Name,
-        HexCode = colorForm.HexCode,
-      });
+    await OnSubmitColor.InvokeAsync(_mapper.Map<NewColor>(colorForm));
   }
 
   class ColorFormModel
