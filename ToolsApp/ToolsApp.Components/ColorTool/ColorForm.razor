@@ -1,14 +1,20 @@
-﻿<form>
+﻿<EditForm Model="@colorForm" OnValidSubmit="@submitColor">
+
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
   <label>
     Name:
-    <input type="text" @bind="@colorForm.Name" />
-   </label>
+    <InputText @bind-Value="@colorForm.Name" />
+    <ValidationMessage For="() => colorForm.Name" />
+  </label>
   <label>
     Hex Code:
-    <input type="text" @bind="@colorForm.HexCode" />
+    <InputText @bind-Value="@colorForm.HexCode" />
+    <ValidationMessage For="() => colorForm.HexCode" />
   </label>
-  <button type="button" @onclick="@submitColor">@ButtonText</button>
-</form>
+  <button>@ButtonText</button>
+</EditForm>
 
 @code {
 
@@ -26,11 +32,11 @@
   {
     base.OnInitialized();
 
-      var mapperConfig = new MapperConfiguration(config => {
-        config.CreateMap<ColorFormModel, NewColor>();
-      });
+    var mapperConfig = new MapperConfiguration(config => {
+      config.CreateMap<ColorFormModel, NewColor>();
+    });
 
-      _mapper = mapperConfig.CreateMapper();
+    _mapper = mapperConfig.CreateMapper();
   }
 
   private async Task submitColor()
@@ -40,7 +46,9 @@
 
   class ColorFormModel
   {
+    [Required]
     public string Name { get; set; }
+    [Required]
     public string HexCode { get; set; }
   }
 
