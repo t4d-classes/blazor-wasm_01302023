@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Components.Web;
 using ToolsApp.Core.Interfaces.Data;
 using ToolsApp.Data;
 using ToolsApp.Web.Data;
+using ToolsApp.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddScoped<ScreenBlocker>();
+
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddScoped<ToolsAppDapperContext>();

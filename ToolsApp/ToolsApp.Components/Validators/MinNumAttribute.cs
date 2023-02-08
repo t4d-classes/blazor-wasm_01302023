@@ -26,7 +26,7 @@ namespace ToolsApp.Components.Validators
         return ValidationResult.Success;
       }
 
-      if (!Double.TryParse(value.ToString(), out double valueDouble))
+      if (!Decimal.TryParse(value.ToString(), out decimal valueDouble))
       {
         return new ValidationResult($"{validationContext.DisplayName} is not a number.");
       }

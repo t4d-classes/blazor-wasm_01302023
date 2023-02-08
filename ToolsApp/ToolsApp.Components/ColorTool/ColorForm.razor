@@ -1,11 +1,15 @@
-﻿<EditForm Model="@colorForm" OnValidSubmit="@submitColor">
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+<EditForm Model="@colorForm" OnValidSubmit="@submitColor">
 
   <DataAnnotationsValidator />
   <ValidationSummary />
 
   <label>
     Name:
-    <InputText @bind-Value="@colorForm.Name" />
+    <InputText id="colorFormName" @bind-Value="@colorForm.Name" />
     <ValidationMessage For="() => colorForm.Name" />
   </label>
   <label>
@@ -39,9 +43,21 @@
     _mapper = mapperConfig.CreateMapper();
   }
 
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      await JS.InvokeVoidAsync("app.setFocus", "#colorFormName");
+    }
+  }
+
   private async Task submitColor()
   {
-    await OnSubmitColor.InvokeAsync(_mapper.Map<NewColor>(colorForm));
+    var newColor = _mapper.Map<NewColor>(colorForm);
+    colorForm.Name = "";
+    colorForm.HexCode = "";
+    await OnSubmitColor.InvokeAsync(_mapper.Map<NewColor>(newColor));
+    await JS.InvokeVoidAsync("app.setFocus", "#colorFormName");
   }
 
   class ColorFormModel

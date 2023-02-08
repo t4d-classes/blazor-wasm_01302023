@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
+using Microsoft.JSInterop;
 
 using ToolsApp.Core.Interfaces.Data;
 using ToolsApp.Core.Interfaces.Models;
@@ -27,6 +28,7 @@ namespace ToolsApp.Data
       _mapper = mapperConfig.CreateMapper();
     }
 
+    [JSInvokable]
     public async Task<IEnumerable<IColor>> All()
     {
       using var con = _dataContext.CreateConnection();
