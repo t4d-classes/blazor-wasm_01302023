@@ -1,0 +1,50 @@
+﻿<EditForm Model="@colorForm" OnValidSubmit="@submitColor">
+
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <label>
+    Name:
+    <InputText @bind-Value="colorForm.Name" />
+    <ValidationMessage For="() => colorForm.Name" />
+  </label>
+  <label>
+    Hex Code:
+    <InputText @bind-Value="colorForm.HexCode" />
+    <ValidationMessage For="() => colorForm.HexCode" />
+  </label>
+  <button>@ButtonText</button>
+</EditForm>
+
+@code {
+
+  [Parameter]
+  public string ButtonText { get; set; } = "Add Color";
+
+  [Parameter]
+  public EventCallback<INewColor> OnSubmitColor { get; set; }
+
+  private ColorFormModel colorForm = new();
+
+  private async Task submitColor()
+  {
+
+    await OnSubmitColor.InvokeAsync(new NewColor
+      {
+        Name = colorForm.Name,
+        HexCode = colorForm.HexCode,
+      });
+    colorForm = new();
+  }
+
+  class ColorFormModel
+  {
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    [HexString]
+    public string HexCode { get; set; }
+  }
+
+}

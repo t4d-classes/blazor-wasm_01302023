@@ -1,0 +1,65 @@
+﻿@page "/car-tool"
+
+@inject ICarsData carsData
+
+@using ToolsApp.Components.CarTool
+
+<AuthorizeView>
+  <Authorized>
+    <ToolHeader HeaderText="Car Tool"></ToolHeader>
+
+    <CarTable Cars="@cars" EditCarId="@editCarId"
+              OnSaveCar="@saveCar" OnCancelCar="@cancelCar"
+              OnEditCar="@editCar" OnDeleteCar="@deleteCar" />
+
+    <CarForm ButtonText="Add Car" OnSubmitCar="@addCar" />
+
+  </Authorized>
+  <NotAuthorized>
+    Please login.
+  </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+
+  private IEnumerable<ICar> cars { get; set; } = new List<ICar>();
+
+  private int editCarId { get; set; } = -1;
+
+  protected override async Task OnInitializedAsync()
+  {
+    cars = await carsData.All();
+  }
+
+  private void editCar(int carId)
+  {
+    editCarId = carId;
+  }
+
+  private void cancelCar()
+  {
+    editCarId = -1;
+  }
+
+  private async Task addCar(INewCar newCar)
+  {
+    await carsData.Append(newCar);
+    cars = await carsData.All();
+    editCarId = -1;
+  }
+
+  private async Task saveCar(ICar car)
+  {
+    await carsData.Replace(car);
+    cars = await carsData.All();
+    editCarId = -1;
+  }
+
+  private async Task deleteCar(int carId)
+  {
+    await carsData.Remove(carId);
+    cars = await carsData.All();
+    editCarId = -1;
+  }
+}

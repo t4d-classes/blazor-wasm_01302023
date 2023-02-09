@@ -1,0 +1,55 @@
+﻿@page "/color-tool2"
+
+@using System.Threading
+@using ToolsApp.Components.ColorTool
+
+
+@inject IColorsData colorsData
+
+@if (isLoading)
+{
+  <div>Loading</div>
+}
+else
+{
+  <div>Not Loading</div>
+}
+
+
+<ToolHeader HeaderText="@colorToolHeader"></ToolHeader>
+<ColorList Colors="@colors" OnDeleteColor="@RemoveColor" />
+<ColorForm ButtonText="Add Color" OnSubmitColor="@AddColor" />
+
+@code {
+
+  private bool isLoading { get; set; } = false;
+
+  private string colorToolHeader = "Color Tool";
+
+  private IEnumerable<IColor> colors { get; set; } = new List<IColor>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    colors = await colorsData.All();
+  }
+
+  public async Task AddColor(INewColor newColor)
+  {
+    // render 1
+    isLoading = true;
+    await colorsData.Append(newColor);
+
+    // render 2
+    Thread.Sleep(2000);
+    colors = await colorsData.All();
+    isLoading = false;
+  }
+
+  public async Task RemoveColor(int colorId)
+  {
+    await colorsData.Remove(colorId);
+    colors = await colorsData.All();
+  }
+
+
+}

@@ -1,0 +1,85 @@
+﻿@using AutoMapper;
+
+<EditForm Model="@carForm" OnValidSubmit="@submitCar">
+
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <label>
+    Make:
+    <InputText @bind-Value="@carForm.Make" />
+    <ValidationMessage For="@(() => carForm.Make)" />
+  </label>
+
+  <label>
+    Model:
+    <InputText @bind-Value="@carForm.Model" />
+    <ValidationMessage For="@(() => carForm.Model)" />
+  </label>
+
+  <label>
+    Year:
+    <InputNumber @bind-Value="@carForm.Year" />
+    <ValidationMessage For="@(() => carForm.Year)" />
+  </label>
+
+  <label>
+    Color:
+    <InputText @bind-Value="@carForm.Color" />
+    <ValidationMessage For="@(() => carForm.Color)" />
+  </label>
+
+  <label>
+    Price:
+    <InputNumber @bind-Value="@carForm.Price" />
+    <ValidationMessage For="@(() => carForm.Price)" />
+  </label>
+
+  <button>@ButtonText</button>
+
+</EditForm>
+
+@code {
+
+  [Parameter]
+  public string ButtonText { get; set; } = "Submit Car";
+
+  [Parameter]
+  public EventCallback<INewCar> OnSubmitCar { get; set; }
+
+  private IMapper mapper;
+
+  private CarFormModel carForm = new();
+
+  protected override void OnInitialized()
+  {
+    var mapperConfig = new MapperConfiguration(config =>
+    {
+      config.CreateMap<CarFormModel, NewCar>();
+    });
+
+    mapper = mapperConfig.CreateMapper();
+  }
+
+  private async void submitCar()
+  {
+    await OnSubmitCar.InvokeAsync(mapper.Map<NewCar>(carForm));
+    carForm = new();
+  }
+
+  class CarFormModel
+  {
+    [Required]
+    public string Make { get; set; }
+    [Required]
+    public string Model { get; set; }
+    [Required]
+    [MinNum(1886)]
+    public int Year { get; set; }
+    [Required]
+    public string Color { get; set; }
+    [Required]
+    [MinNum(0)]
+    public decimal Price { get; set; }
+  }
+}
