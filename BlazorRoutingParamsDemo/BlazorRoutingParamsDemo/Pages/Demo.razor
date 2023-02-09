@@ -1,0 +1,24 @@
+﻿@page "/demo/{demoId}"
+
+<h3>Demo @DemoId</h3>
+
+<p>Message: @message</p>
+
+@code {
+
+  [Parameter]
+  public string DemoId { get; set; }
+
+  private string message;
+
+  //protected override void OnInitialized()
+  //{
+  //  message = "Hello demo " + DemoId;
+  //}
+
+  protected override async Task OnParametersSetAsync()
+  {
+    message = "Hello demo " + DemoId;
+  }
+
+}
